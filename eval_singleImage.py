@@ -18,7 +18,7 @@ assert torch.__version__.split('.')[0] == '1'
 print('CUDA available: {}'.format(torch.cuda.is_available()))
 
 
-use_gpu = True
+use_gpu = False
 
 # list of imagefiles to test on
 imagepaths = ['img_5205_33889741601_o-1-e1493074923224.jpg']
@@ -80,14 +80,14 @@ def main(args=None):
     for imagepath in imagepaths:
         im = imageio.imread(imagepath)
         #im = skimage.transform.resize(im, (640, 928))
-        im = skimage.transform.resize(im, (1008, 928))
+        #im = skimage.transform.resize(im, (1008, 928))
         im=padImage(im)
-        img = torch.from_numpy(im).permute(2, 0, 1)
+        img = torch.from_numpy(im).float().permute(2, 0, 1)
         img = transformer(img).unsqueeze(dim=0)
         
         with torch.no_grad():
             st = time.time()
-                        
+            print('processing...')
             scores, classification, transformed_anchors = retinanet(img.float().to(device))
             print('Elapsed time: {}'.format(time.time()-st))
             idxs = np.where(scores.cpu()>0.5)
