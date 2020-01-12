@@ -18,7 +18,7 @@ assert torch.__version__.split('.')[0] == '1'
 print('CUDA available: {}'.format(torch.cuda.is_available()))
 
 
-use_gpu = False
+use_gpu = True
 
 # list of imagefiles to test on
 imagepaths = ['img_5205_33889741601_o-1-e1493074923224.jpg']
