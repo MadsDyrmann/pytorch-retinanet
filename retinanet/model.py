@@ -251,7 +251,7 @@ class ResNet(nn.Module):
 
         classification = torch.cat([self.classificationModel(feature) for feature in features], dim=1)
 
-        anchors = self.anchors(img_batch)
+        anchors = self.anchors(img_batch).to(regression.device)
 
         if self.training:
             return self.focalLoss(classification, regression, anchors, annotations)
