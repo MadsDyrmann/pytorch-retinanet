@@ -31,6 +31,17 @@ def draw_caption(image, box, caption):
     cv2.putText(image, caption, (b[0], b[1] - 10), cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 1)
 
 
+def padImage(image):
+    rows, cols, cns = image.shape
+
+    pad_w = 32 - rows%32
+    pad_h = 32 - cols%32
+
+    new_image = np.zeros((rows + pad_w, cols + pad_h, cns)).astype(image.dtype)
+    new_image[:rows, :cols, :] = image.astype(np.float32)
+    return new_image
+
+
 def main(args=None):
     parser = argparse.ArgumentParser(description='Simple training script for training a RetinaNet network.')
 
@@ -69,7 +80,8 @@ def main(args=None):
     for imagepath in imagepaths:
         im = imageio.imread(imagepath)
         #im = skimage.transform.resize(im, (640, 928))
-        im = skimage.transform.resize(im, (640, 928))
+        im = skimage.transform.resize(im, (1008, 928))
+        im=padImage(im)
         img = torch.from_numpy(im).permute(2, 0, 1)
         img = transformer(img).unsqueeze(dim=0)
         
