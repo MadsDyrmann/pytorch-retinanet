@@ -82,7 +82,7 @@ def main(args=None):
         #im = skimage.transform.resize(im, (640, 928))
         #im = skimage.transform.resize(im, (1008, 928))
         im=padImage(im)
-        img = torch.from_numpy(im).float().permute(2, 0, 1)
+        img = torch.from_numpy(im).float().permute(2, 0, 1)/255        
         img = transformer(img).unsqueeze(dim=0)
         
         with torch.no_grad():
